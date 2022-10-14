@@ -10,6 +10,9 @@ export const medicineApi = createApi({
       if (token) {
         header.set("Authorization", `Bearer ${token}`);
       }
+      header.set("accept", "*/*");
+      header.set("Content-Type", "application/json");
+     
       return header;
     }
   }),
@@ -28,9 +31,21 @@ export const medicineApi = createApi({
       query: () => ({
         url: `api/manager/medicine`
       })
+    }),
+
+    //4. Создание нового препарата
+    createMedicament: build.mutation({
+      query: (body) => ({
+        url: `api/manager/medicine`,
+        method: 'POST',
+        body
+      })
     })
 
   })
 });
 
-export const { useGetMedicamentByIdQuery, useGetMedicamentsListQuery } = medicineApi;
+export const { 
+  useGetMedicamentByIdQuery, 
+  useGetMedicamentsListQuery, 
+  useCreateMedicamentMutation } = medicineApi;
