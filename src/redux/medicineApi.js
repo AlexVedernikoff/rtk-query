@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const medicineApi = createApi({
   reducerPath: "medicineApi",
+  tagTypes: ['Medicaments'],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://91.241.64.154:8080/",
     prepareHeaders: (header) => {
@@ -19,6 +20,15 @@ export const medicineApi = createApi({
 
   endpoints: (build) => ({
 
+    //1. Удаление препарата по ID
+    deleteMedicamentById: build.mutation({
+      query: (id) => ({
+        url: `/api/manager/medicine/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: [{type: 'Medicaments', id:'LIST' }]
+    }),
+
     //2. Поиск препарата по ID
     getMedicamentById: build.query({
       query: (id) => ({
@@ -30,7 +40,13 @@ export const medicineApi = createApi({
     getMedicamentsList: build.query({
       query: () => ({
         url: `api/manager/medicine`
-      })
+      }),
+      providesTags: (result) =>  result
+        ? [
+            ...result.map(({ id }) => ({ type: 'Medicaments', id })),
+            { type: 'Medicaments', id: 'LIST' },
+          ]
+        : [{ type: 'Medicaments', id: 'LIST' }],
     }),
 
     //4. Создание нового препарата
@@ -46,6 +62,8 @@ export const medicineApi = createApi({
 });
 
 export const { 
+  useDeleteMedicamentByIdMutation,
   useGetMedicamentByIdQuery, 
   useGetMedicamentsListQuery, 
-  useCreateMedicamentMutation } = medicineApi;
+  useCreateMedicamentMutation
+  } = medicineApi;
