@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const medicineApi = createApi({
   reducerPath: "medicineApi",
-  tagTypes: ['Medicaments'],
+  tagTypes: ['medicaments'],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://91.241.64.154:8080/",
     prepareHeaders: (header) => {
@@ -26,7 +26,7 @@ export const medicineApi = createApi({
         url: `/api/manager/medicine/${id}`,
         method: 'DELETE'
       }),
-      invalidatesTags: [{type: 'Medicaments', id:'LIST' }]
+      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
     }),
 
     //2. Поиск препарата по ID
@@ -43,10 +43,10 @@ export const medicineApi = createApi({
       }),
       providesTags: (result) =>  result
         ? [
-            ...result.map(({ id }) => ({ type: 'Medicaments', id })),
-            { type: 'Medicaments', id: 'LIST' },
+            ...result.map(({ id }) => ({ type: 'medicaments', id })),
+            { type: 'medicaments', id: 'LIST' },
           ]
-        : [{ type: 'Medicaments', id: 'LIST' }],
+        : [{ type: 'medicaments', id: 'LIST' }],
     }),
 
     //4. Создание нового препарата
@@ -55,8 +55,19 @@ export const medicineApi = createApi({
         url: `api/manager/medicine`,
         method: 'POST',
         body
-      })
-    })
+      }),
+      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
+    }),
+
+     //5. Изменение препарата по ID
+     modifyMedicament: build.mutation({
+      query: ({bodyRequest, modifyId}) => ({
+        url: `/api/manager/medicine/${modifyId}`,
+        method: 'PUT',
+        body: bodyRequest
+      }),
+      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
+     })
 
   })
 });
@@ -65,5 +76,6 @@ export const {
   useDeleteMedicamentByIdMutation,
   useGetMedicamentByIdQuery, 
   useGetMedicamentsListQuery, 
-  useCreateMedicamentMutation
+  useCreateMedicamentMutation,
+  useModifyMedicamentMutation
   } = medicineApi;
