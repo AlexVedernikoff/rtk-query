@@ -1,4 +1,12 @@
+import { GetResultDescriptionFn } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+interface Post {
+  id: number,
+  type: 'medicaments'
+}
+type PostsResponse = Post[]
+
 
 export const medicineApi = createApi({
   reducerPath: "medicineApi",
@@ -13,7 +21,7 @@ export const medicineApi = createApi({
       }
       header.set("accept", "*/*");
       header.set("Content-Type", "application/json");
-     
+
       return header;
     }
   }),
@@ -26,7 +34,7 @@ export const medicineApi = createApi({
         url: `/api/manager/medicine/${id}`,
         method: 'DELETE'
       }),
-      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
+      invalidatesTags: [{ type: 'medicaments', id: 'LIST' }]
     }),
 
     //2. Поиск препарата по ID
@@ -37,15 +45,16 @@ export const medicineApi = createApi({
     }),
 
     //3. Поиск списка препаратов
-    getMedicamentsList: build.query({
+    getMedicamentsList: build.query<PostsResponse, number>({
+      //query: () => `api/manager/medicine`,
       query: () => ({
         url: `api/manager/medicine`
       }),
-      providesTags: (result) =>  result
+      providesTags: (result) => result
         ? [
-            ...result.map(({ id }) => ({ type: 'medicaments', id })),
-            { type: 'medicaments', id: 'LIST' },
-          ]
+          ...result.map(({ id }) => ({ type: 'medicaments' as const, id })),
+          { type: 'medicaments', id: 'LIST' },
+        ]
         : [{ type: 'medicaments', id: 'LIST' }],
     }),
 
@@ -56,26 +65,26 @@ export const medicineApi = createApi({
         method: 'POST',
         body
       }),
-      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
+      invalidatesTags: [{ type: 'medicaments', id: 'LIST' }]
     }),
 
-     //5. Изменение препарата по ID
-     modifyMedicament: build.mutation({
-      query: ({bodyRequest, modifyId}) => ({
+    //5. Изменение препарата по ID
+    modifyMedicament: build.mutation({
+      query: ({ bodyRequest, modifyId }) => ({
         url: `/api/manager/medicine/${modifyId}`,
         method: 'PUT',
         body: bodyRequest
       }),
-      invalidatesTags: [{type: 'medicaments', id:'LIST' }]
-     })
+      invalidatesTags: [{ type: 'medicaments', id: 'LIST' }]
+    })
 
   })
 });
 
-export const { 
+export const {
   useDeleteMedicamentByIdMutation,
-  useGetMedicamentByIdQuery, 
-  useGetMedicamentsListQuery, 
+  useGetMedicamentByIdQuery,
+  useGetMedicamentsListQuery,
   useCreateMedicamentMutation,
   useModifyMedicamentMutation
-  } = medicineApi;
+} = medicineApi;

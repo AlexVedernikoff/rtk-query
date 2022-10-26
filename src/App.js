@@ -25,7 +25,7 @@ export default function App() {
 
   const bodyRequest =
   {
-    "manufactureName": "MosKhimProm",
+    "manufactureName": "Фабрика имени Ленина",
     "name": addName,
     "iconUrl": "icon1",
     "description": "ot vsego"
