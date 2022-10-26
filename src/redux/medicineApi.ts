@@ -1,12 +1,17 @@
-import { GetResultDescriptionFn } from "@reduxjs/toolkit/dist/query/endpointDefinitions";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { MedicineResponse, MedicineRequest } from '../types/ManagerDTO/ManagerDTO.js';
 
-interface Post {
-  id: number,
-  type: 'medicaments'
+// interface Post {
+//   id: number,
+//   type: 'medicaments'
+// }
+// type PostsResponse = Post[]
+
+type ResponseList = MedicineResponse[];
+type ModifyRequest = {
+  bodyRequest: MedicineRequest,
+  modifyId: number
 }
-type PostsResponse = Post[]
-
 
 export const medicineApi = createApi({
   reducerPath: "medicineApi",
@@ -29,7 +34,7 @@ export const medicineApi = createApi({
   endpoints: (build) => ({
 
     //1. Удаление препарата по ID
-    deleteMedicamentById: build.mutation({
+    deleteMedicamentById: build.mutation<any, number>({
       query: (id) => ({
         url: `/api/manager/medicine/${id}`,
         method: 'DELETE'
@@ -38,15 +43,14 @@ export const medicineApi = createApi({
     }),
 
     //2. Поиск препарата по ID
-    getMedicamentById: build.query({
+    getMedicamentById: build.query<MedicineResponse, any>({
       query: (id) => ({
         url: `api/manager/medicine/${id}`
       })
     }),
 
     //3. Поиск списка препаратов
-    getMedicamentsList: build.query<PostsResponse, number>({
-      //query: () => `api/manager/medicine`,
+    getMedicamentsList: build.query<ResponseList, number>({
       query: () => ({
         url: `api/manager/medicine`
       }),
@@ -59,7 +63,7 @@ export const medicineApi = createApi({
     }),
 
     //4. Создание нового препарата
-    createMedicament: build.mutation({
+    createMedicament: build.mutation<MedicineRequest, any>({
       query: (body) => ({
         url: `api/manager/medicine`,
         method: 'POST',
@@ -69,7 +73,7 @@ export const medicineApi = createApi({
     }),
 
     //5. Изменение препарата по ID
-    modifyMedicament: build.mutation({
+    modifyMedicament: build.mutation<number, ModifyRequest>({
       query: ({ bodyRequest, modifyId }) => ({
         url: `/api/manager/medicine/${modifyId}`,
         method: 'PUT',

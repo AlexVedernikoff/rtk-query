@@ -28,7 +28,7 @@ export default function App() {
     "manufactureName": "Фабрика имени Ленина",
     "name": addName,
     "iconUrl": "icon1",
-    "description": "ot vsego"
+    "description": "3 раза в день после еды"
   }
 
   const handleCreateMedicament = async () => {
