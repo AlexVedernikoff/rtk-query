@@ -14,7 +14,7 @@ export default function App() {
   const [searchId, setSearchId] = useState("");
   const [modifyId, setModifyId] = useState("");
   const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyMUBlbWFpbC5jb20iLCJpYXQiOjE2NjY2MjMyMDAsImV4cCI6MTY2ODYyMzIwMH0.34oeXFhnwf4OACHCdZC6ojlN3JaaRNLqtUKcfGyFZJEzUQVNLZ0MD5ZskReGv-hzbN2B4MAy_iFXDxMEbwQSkg";
+    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYW5hZ2VyMUBlbWFpbC5jb20iLCJpYXQiOjE2NjY3OTMzNzQsImV4cCI6MTY2ODc5MzM3NH0.jglPS8lKvNu9Fg5b4wgHm0L82xiav3cq9BWd1L-WHz234hnUI3bJwlZl1WSmRTBI3_j5oJ4YmyiEu-G64P1r8g";
   localStorage.setItem("token", token);
   const { data: medicamentById } = useGetMedicamentByIdQuery(searchId);
   const { data: medicamentsList } = useGetMedicamentsListQuery();
@@ -27,7 +27,7 @@ export default function App() {
   {
     "manufactureName": "Фабрика имени Ленина",
     "name": addName,
-    "iconUrl": "icon1",
+    "iconUrl": "изображение",
     "description": "3 раза в день после еды"
   }
 
